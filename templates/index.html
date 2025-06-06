@@ -1,0 +1,110 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="ar" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Text Replacer</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        margin: 20px;
+      }
+      label {
+        display: block;
+        margin-top: 10px;
+      }
+      input[type="text"],
+      textarea {
+        width: 100%;
+        padding: 8px;
+        margin-top: 4px;
+      }
+      button {
+        margin-top: 10px;
+        padding: 8px 16px;
+      }
+      .error {
+        color: red;
+        margin-top: 10px;
+      }
+      .result {
+        background: #f0f0f0;
+        padding: 10px;
+        margin-top: 10px;
+        white-space: pre-wrap;
+      }
+      .mapping-item {
+        margin: 2px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>إضافة كلمة للاستبدال / Add a replacement</h2>
+
+    {% if error %}
+    <div class="error">{{ error }}</div>
+    {% endif %}
+
+    <!-- Form to add a new mapping -->
+    <form method="post">
+      <input type="hidden" name="add_mapping" value="1" />
+      <label for="old_word">الكلمة القديمة (Old word):</label>
+      <input
+        type="text"
+        id="old_word"
+        name="old_word"
+        placeholder="اكتب الكلمة هنا"
+      />
+      <label for="new_word">الكلمة الجديدة (New word):</label>
+      <input
+        type="text"
+        id="new_word"
+        name="new_word"
+        placeholder="اكتب الاستبدال هنا"
+      />
+      <button type="submit">أضف / Add</button>
+    </form>
+
+    <hr />
+
+    <h2>استبدال النص / Replace Text</h2>
+    <!-- Form to input text and get replaced output -->
+    <form method="post">
+      <input type="hidden" name="replace_text" value="1" />
+      <label for="input_text">النص الأصلي (Original text):</label>
+      <textarea
+        id="input_text"
+        name="input_text"
+        rows="6"
+        placeholder="اكتب نصاً بالعربية أو الإنجليزية هنا"
+      ></textarea>
+      <button type="submit">استبدال / Replace</button>
+    </form>
+
+    {% if replaced_text is not none %}
+    <h3>النص بعد الاستبدال / Replaced result:</h3>
+    <div class="result">{{ replaced_text }}</div>
+    {% endif %}
+
+    <hr />
+
+    <h2>القائمة الحالية للاستبدالات / Current mappings</h2>
+    <!-- Inline small preview of current mappings -->
+    {% if mappings %}
+    <ul>
+      {% for old, new in mappings.items() %}
+      <li class="mapping-item">
+        “<strong>{{ old }}</strong>” → “<strong>{{ new }}</strong>”
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p>لا توجد استبدالات مضافة بعد. / No mappings added yet.</p>
+    {% endif %}
+
+    <hr />
+    <a href="{{ url_for('mappings') }}">
+      <button type="button">عرض القائمة كاملة / Show full mappings list</button>
+    </a>
+  </body>
+</html>

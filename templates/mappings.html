@@ -1,0 +1,79 @@
+<!-- templates/mappings.html -->
+<!DOCTYPE html>
+<html lang="ar" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Current Mappings</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        margin: 20px;
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+      th,
+      td {
+        border: 1px solid #ccc;
+        padding: 8px;
+        text-align: center;
+      }
+      th {
+        background: #f5f5f5;
+      }
+      a,
+      form {
+        display: inline-block;
+      }
+      a button,
+      form button {
+        padding: 6px 12px;
+        margin: 2px;
+      }
+      form {
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>القائمة الكاملة للاستبدالات / Full mappings list</h2>
+
+    {% if mappings %}
+    <table>
+      <thead>
+        <tr>
+          <th>الكلمة القديمة (Old)</th>
+          <th>الكلمة الجديدة (New)</th>
+          <th>الإجراء</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for old, new in mappings.items() %}
+        <tr>
+          <td>{{ old }}</td>
+          <td>{{ new }}</td>
+          <td>
+            <form method="post" action="{{ url_for('delete_mapping') }}">
+              <input
+                type="hidden"
+                name="old_word_to_delete"
+                value="{{ old }}"
+              />
+              <button type="submit">حذف / Delete</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p>لا توجد استبدالات مضافة بعد. / No mappings added yet.</p>
+    {% endif %}
+
+    <br />
+    <a href="{{ url_for('index') }}">
+      <button>العودة إلى الرئيسية / Back to Home</button>
+    </a>
+  </body>
+</html>
